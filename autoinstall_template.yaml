@@ -1,0 +1,15 @@
+autoinstall:
+  version: 1
+  identity:
+    username: tiny 
+    password: ${TINYTITAN_CRYPTED_PASS} 
+    hostname: titan 
+  ssh:
+    install-server: true
+    allow-pw: true
+    authorized-keys: ${TINYTITAN_AUTH_KEY}
+  storage:
+    layout:
+      name: lvm
+      sizing-policy: all
+
