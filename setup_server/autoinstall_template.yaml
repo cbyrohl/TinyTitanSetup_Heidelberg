@@ -7,7 +7,7 @@ autoinstall:
   ssh:
     install-server: true
     allow-pw: true
-    authorized-keys: ${TINYTITAN_AUTH_KEY}
+    authorized-keys: [${TINYTITAN_AUTH_KEY}]
   storage:
     layout:
       name: lvm

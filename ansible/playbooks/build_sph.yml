@@ -1,0 +1,22 @@
+---
+- name: Clone and Build SPH repository as user tiny
+  hosts: all
+  user: tiny
+  become: no
+  tasks:
+    - name: Clone SPH repository
+      ansible.builtin.git:
+        repo: 'https://github.com/cbyrohl/SPH.git'
+        dest: /home/tiny/SPH
+        update: yes
+        clone: yes
+
+
+    - name: Build the project
+      ansible.builtin.command:
+        cmd: make -j2 -f makefile_debian
+        chdir: /home/tiny/SPH
+      environment:
+        HOME: /home/tiny
+        USER: tiny
+      become_user: tiny

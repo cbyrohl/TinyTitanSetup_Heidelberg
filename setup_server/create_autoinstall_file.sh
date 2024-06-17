@@ -12,7 +12,6 @@ if [ ! -f "$yamltemplate_file" ]; then
     exit 1
 fi
 
-
 if [[ -z "$TINYTITAN_AUTH_KEY" ]]; then
     echo "Warning: AUTHKEY not set. You will not be able to login without password."
 fi
@@ -23,7 +22,9 @@ if [[ "$TINYTITAN_PASS" == "1234" ]]; then
 fi
 
 # Create or clear the temporary file
+[ -e "$yaml_file" ] && rm "$yaml_file"
 touch "$yaml_file"
+
 
 # Read each line of the YAML file
 while IFS= read -r line; do
@@ -32,7 +33,7 @@ while IFS= read -r line; do
         var="${BASH_REMATCH[1]}"
         name="${BASH_REMATCH[2]}"
         value="${!name}"
-        line="${line//${var}/${value}}"
+        line="${line//${var}/\"${value}\"}"
     done
     # Write the processed line to the temporary file
     echo "$line" >> "$yaml_file"

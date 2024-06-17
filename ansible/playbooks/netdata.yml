@@ -1,0 +1,36 @@
+---
+- name: Install Netdata on Ubuntu Servers
+  hosts: all
+  remote_user: root
+  become: yes  # Ensure you have admin privileges
+  tasks:
+    - name: Update and upgrade apt packages
+      ansible.builtin.apt:
+        update_cache: yes
+        upgrade: yes
+        cache_valid_time: 3600  # Cache valid for 1 hour to avoid repeated updates
+
+    - name: Install netdata package (avail on ubuntu) 
+      ansible.builtin.apt:
+        name:
+          - netdata
+        state: present
+
+    - name: Change netdata config to listen on all interfaces
+      lineinfile:
+        path: /etc/netdata/netdata.conf
+        regexp: '^#?bind socket to IP ='
+        line: 'bind socket to IP = 0.0.0.0'
+        backup: yes  # Creates a backup before making changes
+
+    - name: Restart Netdata to apply changes
+      systemd:
+        name: netdata
+        state: restarted
+        enabled: yes
+
+    - name: Ensure Netdata service is running
+      ansible.builtin.systemd:
+        name: netdata
+        state: started
+        enabled: yes

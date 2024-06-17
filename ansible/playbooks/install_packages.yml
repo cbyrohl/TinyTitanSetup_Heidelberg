@@ -1,0 +1,28 @@
+
+- name: install required+recommended apts
+  hosts: "*"
+  user: root
+  become: yes
+  tasks:
+  - name: Update apt cache
+    ansible.builtin.apt:
+      update_cache: yes
+      cache_valid_time: 3600  # Cache valid for one hour to avoid unnecessary updates
+
+  - name: Install packages
+    ansible.builtin.apt:
+      name:
+        - vim
+        - htop
+        - git
+        - libglew-dev
+        - openmpi-bin
+        - libopenmpi-dev
+        - build-essential
+        - libfontconfig1-dev
+        - libglfw3
+        - libglfw3-dev
+        - libgl1-mesa-dev
+        - libtiff-dev
+        - xorg-dev
+      state: present  # Ensure packages are installed
