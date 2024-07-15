@@ -1,0 +1,44 @@
+#!/bin/bash
+
+if [ ! -f /home/tiny/script_running ]
+then
+    touch /home/tiny/script_running
+else
+    echo "kiosk script_running already exists"
+    exit 1
+fi
+
+start_sph() {
+    if [ ! -f /home/tiny/running ]
+    then
+        touch /home/tiny/running
+        echo
+        echo "Starting SPH"
+	cd /home/tiny/SPH && su tiny -c "mpirun -n 5 -host titan4:2,titan1,titan2,titan3 /home/tiny/SPH/bin/sph.out"
+        EXITCODE=$?
+        rm -f /home/tiny/running
+        #clear
+        echo
+        echo "SPH Done"
+
+    else
+        echo
+        echo "Already running either SPH or another process, /home/tiny/running exists"
+    fi
+}
+
+EXITCODE=20
+
+while true
+do
+        sleep 1
+    case "$EXITCODE" in
+        20)
+            start_sph
+            ;;
+        *)
+            echo "All Done! Last EXITCODE:" $EXITCODE
+                    rm -f /home/tiny/script_running
+            exit 1
+    esac
+done

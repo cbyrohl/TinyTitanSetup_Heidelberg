@@ -10,6 +10,7 @@
         dest: /home/tiny/SPH
         update: yes
         clone: yes
+        version: marsilius
 
 
     - name: Build the project

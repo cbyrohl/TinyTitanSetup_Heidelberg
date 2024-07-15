@@ -1,0 +1,38 @@
+---
+- name: USB Device Setup Playbook
+  hosts: titan4
+  become: yes
+  remote_user: root
+  vars:
+    username: "tiny"
+
+  tasks:
+    - name: Ensure /dev/bus/usb has the correct permissions
+      file:
+        path: /dev/bus/usb
+        recurse: yes
+        mode: '0777'
+
+    - name: Create the udev rules file
+      copy:
+        dest: /etc/udev/rules.d/100-local.rules
+        content: |
+          SUBSYSTEM=="usb", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="028e", OWNER="{{ username }}", GROUP="plugdev", TAG+="uaccess"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Add user to plugdev group
+      user:
+        name: "{{ username }}"
+        groups: plugdev
+        append: yes
+
+    - name: Reload udev rules
+      command: udevadm control --reload-rules
+
+    - name: Install xboxdrv
+      apt:
+        name: xboxdrv
+        state: present
+        update_cache: yes

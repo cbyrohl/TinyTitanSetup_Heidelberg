@@ -1,0 +1,32 @@
+---
+- name: Deploy script to titan4
+  hosts: titan4
+  remote_user: tiny
+  tasks:
+    - name: Copy run_sph.sh script 
+      template:
+        src: run_sph.sh.j2
+        dest: /home/tiny/run_sph.sh
+        owner: tiny
+        group: tiny
+        mode: '0755'
+
+    - name: Make run_sph.sh executable
+      file:
+        path: /home/tiny/run_sph.sh
+        mode: '0755'
+
+    - name: Copy start.sh script 
+      template:
+        src: start.sh.j2
+        dest: /home/tiny/start.sh
+        owner: tiny
+        group: tiny
+        mode: '0755'
+
+    - name: Make start.sh executable
+      file:
+        path: /home/tiny/start.sh
+        mode: '0755'
+
+

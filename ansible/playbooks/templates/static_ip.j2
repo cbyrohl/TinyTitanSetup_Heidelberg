@@ -1,0 +1,9 @@
+# templates/static_ip.j2
+
+auto {{ network_interface }}
+iface {{ network_interface }} inet static
+    address {{ static_ips[inventory_hostname] }}
+    netmask {{ netmask }}
+    gateway {{ gateway }}
+    broadcast {{ broadcast }}
+    dns-nameservers {{ dns_servers | join(' ') }}

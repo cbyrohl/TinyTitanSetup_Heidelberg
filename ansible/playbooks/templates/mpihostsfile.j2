@@ -1,0 +1,4 @@
+# MPI Hosts File
+{% for host in groups['titancluster'] %}
+{{ hostvars[host].ansible_default_ipv4.address }}
+{% endfor %}

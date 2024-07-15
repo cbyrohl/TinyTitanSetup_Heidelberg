@@ -1,0 +1,18 @@
+---
+- name: Create mpihostsfile with all titan host IPs
+  remote_user: tiny 
+  hosts: titancluster
+  become: no
+
+  vars:
+    mpihosts_file_path: "~/mpihostsfile"
+
+  tasks:
+    - name: Gather facts from all hosts
+      ansible.builtin.setup:
+
+    - name: Create mpihostsfile in each user's home directory
+      template:
+        src: mpihostsfile.j2
+        dest: "{{ mpihosts_file_path }}"
+
